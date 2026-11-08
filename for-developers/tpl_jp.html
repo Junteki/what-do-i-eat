@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>何食べる？ What do I eat?</title>
+<style>
+:root{--paper:#f5efe3;--card:#fffaf0;--ink:#1f1a17;--sec:#6b5f55;--ter:#a3968a;--line:#d9cdb8;--shu:#c8322a;--shu2:#e0583a;--ai:#1d3557;--ai2:#2b4a73;--kin:#b8892f;--fill:rgba(31,26,23,.06);--tabh:0px;
+--mincho:"Hiragino Mincho ProN","Hiragino Mincho Pro","Yu Mincho","YuMincho","Noto Serif JP","Songti SC",serif;
+--sans:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--paper:#16130f;--card:#221d18;--ink:#f1e9da;--sec:#b3a593;--ter:#7d7062;--line:#3a3129;--fill:rgba(241,233,218,.07);--ai:#142640;--ai2:#1f3657}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.4 var(--sans);letter-spacing:-.2px;padding-bottom:calc(var(--tabh) + 110px + env(safe-area-inset-bottom));
+background-image:radial-gradient(rgba(120,90,50,.05) 1px,transparent 1px),radial-gradient(rgba(120,90,50,.04) 1px,transparent 1px);background-size:7px 7px,13px 13px;background-position:0 0,3px 5px}
+body:has(#m-detail:checked){--tabh:62px}
+input.h,.grid input,.seg input,.chips input,.qs input{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+a{color:var(--ai2);text-decoration:none}
+@media (prefers-color-scheme:dark){a{color:#8fb3e0}}
+.mc{font-family:var(--mincho)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{0%{transform:scale(.94) rotate(-1deg)}60%{transform:scale(1.02) rotate(.4deg)}100%{transform:none}}
+@keyframes roll{to{transform:translateY(-100%)}}
+
+/* ---------- header: seigaiha band ---------- */
+.hdr{position:relative;color:#f5efe3;padding:calc(14px + env(safe-area-inset-top)) 18px 16px;background-color:var(--ai);
+background-image:radial-gradient(circle at 100% 150%,var(--ai) 24%,var(--ai2) 24%,var(--ai2) 28%,var(--ai) 28%,var(--ai) 36%,var(--ai2) 36%,var(--ai2) 40%,transparent 40%,transparent),
+radial-gradient(circle at 0 150%,var(--ai) 24%,var(--ai2) 24%,var(--ai2) 28%,var(--ai) 28%,var(--ai) 36%,var(--ai2) 36%,var(--ai2) 40%,transparent 40%,transparent),
+radial-gradient(circle at 50% 100%,var(--ai2) 10%,var(--ai) 10%,var(--ai) 23%,var(--ai2) 23%,var(--ai2) 30%,var(--ai) 30%,var(--ai) 43%,var(--ai2) 43%,var(--ai2) 50%,var(--ai) 50%,var(--ai) 63%,var(--ai2) 63%,var(--ai2) 71%,transparent 71%,transparent),
+radial-gradient(circle at 100% 50%,var(--ai2) 5%,var(--ai) 5%,var(--ai) 15%,var(--ai2) 15%,var(--ai2) 20%,var(--ai) 20%,var(--ai) 29%,var(--ai2) 29%,var(--ai2) 34%,var(--ai) 34%,var(--ai) 44%,var(--ai2) 44%,var(--ai2) 49%,transparent 49%,transparent),
+radial-gradient(circle at 0 50%,var(--ai2) 5%,var(--ai) 5%,var(--ai) 15%,var(--ai2) 15%,var(--ai2) 20%,var(--ai) 20%,var(--ai) 29%,var(--ai2) 29%,var(--ai2) 34%,var(--ai) 34%,var(--ai) 44%,var(--ai2) 44%,var(--ai2) 49%,transparent 49%,transparent);
+background-size:60px 30px}
+.hdr::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:6px;background:var(--shu)}
+.brand{display:flex;align-items:center;gap:12px}
+.hanko{flex:none;width:46px;height:46px;border-radius:8px;background:var(--shu);color:#fff;display:grid;place-items:center;font-family:var(--mincho);font-size:30px;font-weight:700;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35);transform:rotate(-4deg)}
+.brand h1{margin:0;font-family:var(--mincho);font-size:30px;font-weight:700;letter-spacing:2px;line-height:1.1}
+.brand small{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;opacity:.8;margin-top:3px}
+/* mode selector: 簡単 / 詳細 */
+.mode{display:flex;margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:3px;border:1px solid rgba(255,255,255,.18)}
+.mode label{flex:1;text-align:center;padding:8px 6px;border-radius:8px;font-size:14px;font-weight:600;color:rgba(245,239,227,.8)}
+.mode label b{font-family:var(--mincho);font-size:17px;margin-right:6px;letter-spacing:1px}
+body:has(#m-simple:checked) .mode [for=m-simple],body:has(#m-detail:checked) .mode [for=m-detail]{background:var(--paper);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+body:has(#m-simple:checked) .mode [for=m-simple] b,body:has(#m-detail:checked) .mode [for=m-detail] b{color:var(--shu)}
+
+/* ---------- pages ---------- */
+.pg{position:fixed;left:0;top:0;width:100vw;height:10px;overflow:hidden;pointer-events:none;transform:translateX(-300vw)}
+body:has(#m-simple:checked) #pg-spin,
+body:has(#m-detail:checked):has(#t-home:checked) #pg-home,body:has(#m-detail:checked):has(#t-spin:checked) #pg-spin,
+body:has(#m-detail:checked):has(#t-three:checked) #pg-three,body:has(#m-detail:checked):has(#t-quiz:checked) #pg-quiz,
+body:has(#m-detail:checked):has(#t-browse:checked) #pg-browse{position:static;width:auto;height:auto;overflow:visible;pointer-events:auto;transform:none;animation:fade .25s ease}
+.pt{display:flex;align-items:baseline;gap:10px;padding:24px 20px 2px}
+.pt .k{font-family:var(--mincho);font-size:30px;color:var(--shu);font-weight:700;line-height:1}
+.pt h2{margin:0;font-family:var(--mincho);font-size:24px;font-weight:700;letter-spacing:.5px}
+.pd{padding:4px 20px 0;color:var(--sec);font-size:14px}
+.sh{display:flex;align-items:center;gap:8px;padding:20px 20px 8px;font-size:12px;color:var(--sec);letter-spacing:1.5px;text-transform:uppercase}
+.sh::after{content:"";flex:1;border-top:1px solid var(--line)}
+.sh .n{font-family:var(--mincho);color:var(--shu);font-size:16px;letter-spacing:0}
+.ft{padding:12px 20px 0;font-size:12.5px;color:var(--sec);line-height:1.5}
+.grp{margin:0 16px;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:12px 14px;position:relative;color:var(--ink)}
+.row+.row{border-top:1px dashed var(--line)}
+.ico{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--mincho);font-size:19px;font-weight:700;color:#fff}
+.rt{flex:1;min-width:0}.rt b{display:block;font-weight:600}.rt small{display:block;font-size:13px;color:var(--sec);margin-top:2px;line-height:1.35}
+.chev{color:var(--ter);font-size:22px}
+.ri{width:26px;text-align:center;font-family:var(--mincho);font-size:20px;color:var(--shu);font-weight:700}
+.mp{flex:none;font-size:13px;font-weight:700;border:1.5px solid var(--shu);color:var(--shu);padding:4px 11px;border-radius:4px;letter-spacing:.5px}
+details.guide{margin:0 16px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+details.guide summary{font-weight:700;font-family:var(--mincho);font-size:17px}
+details.guide ol{margin:10px 0 0;padding-left:20px;font-size:14.5px;color:var(--ink)}details.guide li{margin:6px 0}
+
+/* ---------- plates (food art) ---------- */
+.plate,.splate{flex:none;display:grid;place-items:center;border-radius:50%;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12),inset 0 0 0 3px rgba(255,255,255,.35),0 2px 6px rgba(0,0,0,.12)}
+.plate span,.splate span,.bplate span{filter:drop-shadow(0 3px 4px rgba(0,0,0,.28))}
+.plate{width:60px;height:60px;font-size:32px}
+.splate{width:38px;height:38px;font-size:20px}
+
+/* ---------- feel grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:0 16px}
+.grid label{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:9px 2px 7px;text-align:center;font-size:11px;font-weight:600;line-height:1.15}
+.grid label span{display:block;font-size:27px;line-height:32px}
+.grid label i{display:block;font-style:normal;font-family:var(--mincho);font-size:12px;color:var(--sec);font-weight:600;margin-top:1px}
+.grid input:checked+label{border:2px solid var(--shu);background:color-mix(in srgb,var(--shu) 9%,var(--card));padding:8px 1px 6px}
+.grid input:checked+label i{color:var(--shu)}
+.seg{display:flex;margin:10px 16px 0;background:var(--fill);border:1px solid var(--line);border-radius:7px;padding:2px}
+.seg label{flex:1;text-align:center;padding:7px 4px;font-size:13.5px;font-weight:600;border-radius:5px;color:var(--sec)}
+.seg input:checked+label{background:var(--ink);color:var(--paper)}
+.chips{display:flex;gap:7px;overflow-x:auto;padding:2px 16px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chips label{flex:none;padding:7px 13px;border:1px solid var(--line);background:var(--card);border-radius:4px;font-size:14px;font-weight:600;white-space:nowrap}
+.chips input:checked+label{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chips.veto input:checked+label{background:var(--shu);border-color:var(--shu);color:#fff;text-decoration:line-through}
+
+/* ---------- 食券 ticket (spin result) ---------- */
+.stage{position:relative;margin:14px 16px 0}
+.ph{display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px dashed var(--ter);border-radius:6px;padding:14px 16px}
+.ph .plate{background:radial-gradient(circle at 35% 30%,#e0583a,#c8322a)}
+.ph h3{margin:0 0 2px;font-family:var(--mincho);font-size:18px}.ph p{margin:0;color:var(--sec);font-size:13.5px}
+.sp{position:absolute;top:0;left:0;width:100%;overflow:hidden;clip-path:inset(0 0 100% 0);pointer-events:none}
+.sp.hero{height:424px;border-radius:6px}
+.sp.hero .it{height:424px}
+.tk{position:relative;height:100%;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;
+background-image:radial-gradient(circle at 0 143px,var(--paper) 9px,transparent 10px),radial-gradient(circle at 100% 143px,var(--paper) 9px,transparent 10px)}
+.tkh{display:flex;justify-content:space-between;align-items:center;background:var(--shu);color:#fff;padding:7px 46px 7px 14px;font-family:var(--mincho);font-weight:700;letter-spacing:3px;font-size:15px}
+.tkh small{font-family:var(--sans);letter-spacing:1.5px;font-size:10.5px;opacity:.9}
+.tkt{display:flex;gap:14px;align-items:center;padding:14px 16px 16px;border-bottom:2px dashed var(--line)}
+.bplate{flex:none;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:42px;box-shadow:inset 0 -5px 0 rgba(0,0,0,.14),inset 0 0 0 4px rgba(255,255,255,.35),0 3px 8px rgba(0,0,0,.15)}
+.tkn{min-width:0}.tkn .jp{font-family:var(--mincho);font-size:26px;font-weight:700;line-height:1.15;letter-spacing:1px}
+.tkn .en{font-size:15px;font-weight:600;color:var(--sec);margin-top:2px}
+.tkb{padding:12px 16px 14px;flex:1;display:flex;flex-direction:column}
+.tkb .od{font-size:16px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tkb .meta{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:13px;color:var(--sec)}
+.yen{font-family:var(--mincho);font-weight:700;color:var(--shu);border:1.5px solid var(--shu);border-radius:4px;padding:2px 7px;font-size:14px;white-space:nowrap}
+.tkb .btn{display:block;text-align:center;margin-top:auto;padding:12px;border-radius:6px;background:var(--ink);color:var(--paper);font-weight:700;letter-spacing:.5px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+.tags .rk{font-size:12px;color:var(--sec)}
+.gut{margin-top:10px;font-size:12.5px;color:var(--sec);border-left:3px solid var(--kin);padding:2px 0 2px 9px;line-height:1.4}
+.it.none{height:auto!important;background:var(--card);padding:16px;border:1px solid var(--line);border-radius:6px}
+body:has(#s-idle:checked) #pg-spin .sp,body:has(#p-idle:checked) #pg-three .sp{clip-path:inset(0 0 100% 0)!important;pointer-events:none!important}
+body:has(#s-roll:checked) #pg-spin .ph,body:has(#s-stop:checked) #pg-spin .ph{display:none}
+body:has(#s-roll:checked) #pg-spin .stage,body:has(#s-stop:checked) #pg-spin .stage{position:fixed;left:16px;right:16px;bottom:calc(var(--tabh) + 86px + env(safe-area-inset-bottom));margin:0;height:424px;z-index:15;box-shadow:0 16px 44px rgba(0,0,0,.4);border-radius:6px}
+body:has(#s-stop:checked) #pg-spin .strip,body:has(#p-stop:checked) #pg-three .strip{animation-play-state:paused!important}
+body:has(#s-roll:checked) #pg-spin .it a,body:has(#s-roll:checked) #pg-spin .gut,body:has(#p-roll:checked) #pg-three .it a{visibility:hidden}
+body:has(#s-roll:checked) #pg-spin .sp{filter:blur(.7px)}
+body:has(#s-stop:checked) #pg-spin .stage,body:has(#p-stop:checked) .slots{animation:pop .4s ease}
+.x{display:none;position:absolute;top:4px;right:6px;z-index:16;width:30px;height:30px;place-items:center;color:#fff;font-size:17px;font-weight:700}
+body:has(#s-stop:checked) #pg-spin .x{display:grid}
+
+/* ---------- 松竹梅 pick 3 ---------- */
+.slots{margin:6px 16px 0}
+.slot{margin-bottom:12px}
+.slab{display:flex;align-items:center;gap:8px;margin:0 2px 6px;font-size:13px;font-weight:700;color:var(--sec)}
+.slab .k{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--mincho);color:#fff;font-size:16px}
+.reel{position:relative}
+.reel .ph2{height:100px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1.5px dashed var(--ter);border-radius:6px;font-family:var(--mincho);font-size:26px;color:var(--ter)}
+body:has(#p-roll:checked) #pg-three .ph2,body:has(#p-stop:checked) #pg-three .ph2{visibility:hidden}
+.sp.mini{height:100px;border-radius:6px}
+.sp.mini .it{height:100px;display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.mb{flex:1;min-width:0}.mb b{font-size:16px}.mj{font-family:var(--mincho);font-size:13px;color:var(--sec);margin-left:4px}
+.mo{font-size:14px;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
+.mm{font-size:12px;color:var(--sec);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- quiz ---------- */
+.qs{margin:0 16px}.qo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qs label{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;font-weight:600;font-size:15px}
+.qs label .qe{display:block;font-size:30px;margin-bottom:4px}
+.qs input:checked+label{border:2px solid var(--shu);padding:11px;background:color-mix(in srgb,var(--shu) 9%,var(--card))}
+.q2,.q3,.qres,.qreset{display:none}
+body:has(input[name=q1]:checked) .q2,body:has(input[name=q2]:checked) .q3,body:has(input[name=q3]:checked) .qreset{display:block}
+.qi{display:flex;gap:10px;align-items:center;padding:10px 12px}
+.qi+.qi{border-top:1px dashed var(--line)}
+.md{font-family:var(--mincho);font-size:18px;font-weight:700;color:var(--shu);width:22px;text-align:center}
+.qreset button{display:block;margin:16px auto;background:none;border:1.5px solid var(--ink);border-radius:4px;color:var(--ink);font:inherit;font-weight:600;padding:8px 18px}
+
+/* ---------- browse cards ---------- */
+.card{display:flex;gap:12px;background:var(--card);margin:9px 16px;padding:12px;border:1px solid var(--line);border-radius:6px}
+.cb{flex:1;min-width:0}
+.ct{display:flex;align-items:center;gap:8px}.ct b{font-size:16.5px}
+.cj{font-family:var(--mincho);font-size:14px;color:var(--sec)}
+.co{font-size:14.5px;margin-top:4px}
+.cm{font-size:12.5px;color:var(--sec);margin-top:4px}
+.cf{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px}
+.cf .rk{font-size:11.5px;color:var(--sec);flex:1 1 0;min-width:0}
+.chip{font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:3px;background:var(--fill)}
+.chip.hot{background:rgba(200,50,42,.12);color:var(--shu)}
+.stamp{flex:none;font-family:var(--mincho);font-size:12px;font-weight:700;width:22px;height:22px;display:grid;place-items:center;border-radius:4px;border:1.5px solid;transform:rotate(-6deg)}
+.tS{color:#fff;background:var(--shu);border-color:var(--shu)}.tA{color:var(--shu);border-color:var(--shu)}.tB{color:var(--kin);border-color:var(--kin)}.tC{color:#5d7a3a;border-color:#5d7a3a}.tD{color:var(--ai2);border-color:var(--ai2)}.tN{color:var(--sec);border-color:var(--ter);font-size:9px;width:auto;padding:0 4px}
+
+/* ---------- fab ---------- */
+.fab{display:none;position:fixed;left:16px;right:16px;bottom:calc(var(--tabh) + 14px + env(safe-area-inset-bottom));z-index:20}
+body:has(#m-simple:checked) #pg-spin .fab,body:has(#m-detail:checked):has(#t-spin:checked) #pg-spin .fab,body:has(#m-detail:checked):has(#t-three:checked) #pg-three .fab{display:block}
+.fab label{display:none;text-align:center;padding:15px;border-radius:8px;background:var(--shu);color:#fff;font-size:17px;font-weight:700;letter-spacing:.5px;box-shadow:0 8px 22px rgba(200,50,42,.4),inset 0 -3px 0 rgba(0,0,0,.18)}
+.fab label b{font-family:var(--mincho);font-size:19px;margin-right:8px;letter-spacing:2px}
+.fab label.dark{background:var(--ink);color:var(--paper);box-shadow:0 8px 22px rgba(0,0,0,.3)}
+body:has(#s-idle:checked) .f-si,body:has(#s-roll:checked) .f-sr,body:has(#s-stop:checked) .f-ss{display:block}
+body:has(#p-idle:checked) .f-pi,body:has(#p-roll:checked) .f-pr,body:has(#p-stop:checked) .f-ps{display:block}
+
+/* ---------- tab bar ---------- */
+.tabs{display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--paper) 92%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:6px 0 calc(5px + env(safe-area-inset-bottom))}
+body:has(#m-detail:checked) .tabs{display:flex}
+.tabs label{flex:1;text-align:center;font-size:10px;font-weight:600;color:var(--sec)}
+.tabs label span{display:grid;place-items:center;margin:0 auto 2px;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--ter);font-family:var(--mincho);font-size:16px;font-weight:700;color:var(--sec)}
+body:has(#t-home:checked) .tabs [for=t-home],body:has(#t-spin:checked) .tabs [for=t-spin],body:has(#t-three:checked) .tabs [for=t-three],body:has(#t-quiz:checked) .tabs [for=t-quiz],body:has(#t-browse:checked) .tabs [for=t-browse]{color:var(--shu)}
+body:has(#t-home:checked) .tabs [for=t-home] span,body:has(#t-spin:checked) .tabs [for=t-spin] span,body:has(#t-three:checked) .tabs [for=t-three] span,body:has(#t-quiz:checked) .tabs [for=t-quiz] span,body:has(#t-browse:checked) .tabs [for=t-browse] span{background:var(--shu);border-color:var(--shu);color:#fff}
+/* simple vs detailed bits on the shared spin page */
+.only-d{display:none}body:has(#m-detail:checked) .only-d{display:block}
+body:has(#m-detail:checked) .only-s{display:none}
+%%DYNCSS%%
+</style></head>
+<body>
+<input class="h" type="radio" name="m" id="m-simple" checked><input class="h" type="radio" name="m" id="m-detail">
+<input class="h" type="radio" name="tab" id="t-home" checked><input class="h" type="radio" name="tab" id="t-spin"><input class="h" type="radio" name="tab" id="t-three"><input class="h" type="radio" name="tab" id="t-quiz"><input class="h" type="radio" name="tab" id="t-browse">
+<input class="h" type="radio" name="s" id="s-idle" checked><input class="h" type="radio" name="s" id="s-roll"><input class="h" type="radio" name="s" id="s-stop">
+<input class="h" type="radio" name="p" id="p-idle" checked><input class="h" type="radio" name="p" id="p-roll"><input class="h" type="radio" name="p" id="p-stop">
+
+<header class="hdr">
+<div class="brand"><div class="hanko">食</div><div><h1>何食べる？</h1><small>What do I eat? · %%N%% chains</small></div></div>
+<div class="mode"><label for="m-simple"><b>簡単</b>Simple</label><label for="m-detail"><b>詳細</b>Detailed</label></div>
+</header>
+
+<!-- HOME (detailed) -->
+<section class="pg" id="pg-home">
+<div class="pt"><span class="k">家</span><h2>How decisive are you?</h2></div>
+<div class="pd">Pick the row that matches your mood. Each one uses a different trick from decision research.</div>
+<div class="sh"><span class="n">一</span>Choose a mode</div>
+<div class="grp">%%MODES%%</div>
+<div class="sh"><span class="n">二</span>Consensus top 5</div>
+<div class="grp">%%BOARD%%</div>
+<div class="ft">Ranked across 8 Instagram tier lists (S=5 … D=1, plus one neutral vote so a single list can't crown a chain).</div>
+<div class="sh"><span class="n">三</span>Decision hacks</div>
+<div class="grp">
+<div class="row"><span class="ico" style="background:var(--kin)">銭</span><div class="rt"><b>Coin-flip gut check</b><small>How you feel when the pick lands is the real answer. Relief means go; disappointment means you wanted something else.</small></div></div>
+<div class="row"><span class="ico" style="background:#5d7a3a">足</span><div class="rt"><b>Good enough wins</b><small>Satisficers end up happier than maximisers. Take the first pick that clears the bar, within 3 spins.</small></div></div>
+<div class="row"><span class="ico" style="background:var(--ai2)">三</span><div class="rt"><b>Three, not thirty</b><small>Big menus cause choice overload. A shortlist of three gets you eating sooner.</small></div></div>
+<div class="row"><span class="ico" style="background:var(--shu)">否</span><div class="rt"><b>Veto, don't choose</b><small>When nothing appeals, cross things off. Ruling out is easier than picking.</small></div></div>
+<div class="row"><span class="ico" style="background:#4a3f6b">夜</span><div class="rt"><b>After midnight, delegate</b><small>Judgement dips late at night. Let the spinner decide.</small></div></div>
+</div>
+<div class="sh"><span class="n">四</span>How to use</div>
+%%GUIDE%%
+<div class="ft">Chains marked NEW were added and aren't ranked. Hours and prices vary by branch, so tap 地図 Map to check. Sources: tier_japan_lab, tenten_in_japan (×2), tierskingdom, japanpicksbylocals, travelwiththevees, jpn_things, japanfoodtier.</div>
+</section>
+
+<!-- SPIN (shared: Simple mode + Detailed tab) -->
+<section class="pg" id="pg-spin">
+<div class="pt"><span class="k">回</span><h2>おまかせ · Just pick for me</h2></div>
+<div class="sh"><span class="n">一</span>Pick a feel (or don't)</div>
+<div class="grid">%%GRID%%</div>
+<div class="seg"><input type="radio" name="st" id="st-any" checked><label for="st-any">Any time</label><input type="radio" name="st" id="st-late"><label for="st-late">🌙 Late night</label></div>
+<div class="sh"><span class="n">二</span>Spin</div>
+<div class="stage">
+<div class="ph"><div class="plate"><span>🎲</span></div><div><h3>Tap 回す Spin below</h3><p>Better-ranked chains come up more often. Tap Stop whenever you like.</p></div></div>
+<label class="x" for="s-idle">✕</label>
+%%SPINS%%
+</div>
+<div class="only-s">
+<div class="sh"><span class="n">三</span>How to use</div>
+%%GUIDE_S%%
+<div class="ft">Want Pick 3, a quiz, veto or the full list? Switch to <b>詳細 Detailed</b> at the top. Hours and prices vary by branch, so check the map.</div>
+</div>
+<div class="fab"><label class="f-si" for="s-stop"><b>回す</b>Spin</label><label class="f-sr dark" for="s-stop"><b>止める</b>Stop!</label><label class="f-ss" for="s-roll"><b>もう一回</b>Again</label></div>
+</section>
+
+<!-- PICK 3: 松竹梅 -->
+<section class="pg" id="pg-three">
+<div class="pt"><span class="k">三</span><h2>松竹梅 · Give me 3</h2></div>
+<div class="pd">Matsu (a treat), Take (a safe bet) and Ume (a wildcard). Pick the one that makes you smile.</div>
+<div class="seg"><input type="radio" name="pt" id="pt-any" checked><label for="pt-any">Any time</label><input type="radio" name="pt" id="pt-late"><label for="pt-late">🌙 Late night</label></div>
+<div class="slots">%%P3%%</div>
+<div class="ft">Can't choose among three? Go with 竹, the safe bet. That's what it's for.</div>
+<div class="fab"><label class="f-pi" for="p-stop"><b>配る</b>Deal 3</label><label class="f-pr dark" for="p-stop"><b>止める</b>Stop!</label><label class="f-ps" for="p-roll"><b>もう一回</b>Reshuffle</label></div>
+</section>
+
+<!-- QUIZ -->
+<section class="pg" id="pg-quiz">
+<div class="pt"><span class="k">問</span><h2>This or that</h2></div>
+<div class="pd">Three easy calls. No overthinking.</div>
+<form>
+<div class="sh"><span class="n">一</span>What base?</div><div class="qs"><div class="qo">%%Q1%%</div></div>
+<div class="q2"><div class="sh"><span class="n">二</span>How hungry?</div><div class="qs"><div class="qo">%%Q2%%</div></div></div>
+<div class="q3"><div class="sh"><span class="n">三</span>What vibe?</div><div class="qs"><div class="qo">%%Q3%%</div></div></div>
+%%QRES%%
+<div class="qreset"><button type="reset">↺ Start over</button></div>
+</form>
+</section>
+
+<!-- BROWSE / VETO -->
+<section class="pg" id="pg-browse">
+<div class="pt"><span class="k">覧</span><h2>All chains</h2></div>
+<div class="pd">Filter in what you want, or veto what you don't.</div>
+<div class="sh"><span class="n">否</span>Veto: not feeling…</div><div class="chips veto">%%VETO%%</div>
+<div class="sh"><span class="n">類</span>Feel</div><div class="chips">%%BF%%</div>
+<div class="sh"><span class="n">時</span>When · Budget</div>%%BT%%%%BB%%
+<div class="sh"><span class="n">要</span>Must be</div><div class="chips"><input type="checkbox" id="bx-solo"><label for="bx-solo">🙋 Solo-friendly</label><input type="checkbox" id="bx-spicy"><label for="bx-spicy">🌶️ Spicy option</label></div>
+<div class="sh"><span class="n">順</span>Ranked by consensus</div>
+%%CARDS%%
+<div class="ft">Nothing showing? Loosen a filter or un-veto something.</div>
+</section>
+
+<nav class="tabs">
+<label for="t-home"><span>家</span>Home</label>
+<label for="t-spin"><span>回</span>Spin</label>
+<label for="t-three"><span>三</span>Pick 3</label>
+<label for="t-quiz"><span>問</span>Quiz</label>
+<label for="t-browse"><span>覧</span>Browse</label>
+</nav>
+</body></html>
