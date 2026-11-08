@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>What do I eat? (Simple)</title>
+<style>
+:root{--bg:#f2f2f7;--card:#fff;--fg:#000;--sec:rgba(60,60,67,.6);--ter:rgba(60,60,67,.3);--sep:rgba(60,60,67,.29);--fill:rgba(118,118,128,.12);--tint:#ff9500;--blue:#007aff;--shadow:0 1px 2px rgba(0,0,0,.04)}
+@media (prefers-color-scheme:dark){:root{--bg:#000;--card:#1c1c1e;--fg:#fff;--sec:rgba(235,235,245,.6);--ter:rgba(235,235,245,.3);--sep:rgba(84,84,88,.65);--fill:rgba(118,118,128,.24);--tint:#ff9f0a;--blue:#0a84ff;--shadow:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.29 -apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans",system-ui,sans-serif;letter-spacing:-.41px;padding:env(safe-area-inset-top) 0 calc(110px + env(safe-area-inset-bottom))}
+input.h,.grid input,.seg input{position:absolute;opacity:0;pointer-events:none}
+a{color:var(--blue);text-decoration:none}
+@keyframes pop{0%{transform:scale(.92)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
+@keyframes roll{to{transform:translateY(-100%)}}
+.lt{padding:14px 20px 4px}
+.lt .ey{font-size:13px;font-weight:600;color:var(--tint);text-transform:uppercase}
+.lt h1{margin:2px 0 0;font-size:34px;line-height:41px;font-weight:700;letter-spacing:.37px}
+.sh{padding:18px 20px 7px;font-size:13px;color:var(--sec);text-transform:uppercase}
+.ft{padding:14px 20px 0;font-size:13px;color:var(--sec);line-height:1.38;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 16px}
+.grid label{background:var(--card);border-radius:14px;padding:10px 4px 8px;text-align:center;font-size:11px;font-weight:600;box-shadow:var(--shadow);border:2px solid transparent;letter-spacing:-.1px;line-height:1.15}
+.grid label span{display:block;font-size:28px;line-height:34px;margin-bottom:2px}
+.grid input:checked+label{border-color:var(--tint);background:color-mix(in srgb,var(--tint) 14%,var(--card))}
+.seg{display:flex;margin:12px 16px 0;background:var(--fill);border-radius:9px;padding:2px}
+.seg label{flex:1;text-align:center;padding:7px 4px;font-size:14px;font-weight:500;border-radius:7px}
+.seg input:checked+label{background:var(--card);font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+.stage{position:relative;margin:14px 16px 0}
+.ph,.it{height:448px;background:var(--card);border-radius:22px;padding:14px;overflow:hidden}
+.ph{text-align:center;box-shadow:var(--shadow)}
+.ph h2{margin:14px 0 4px;font-size:22px}.ph p{margin:0;color:var(--sec);font-size:15px}
+.htile{width:100%;height:150px;border-radius:16px;font-size:90px;display:grid;place-items:center}
+.htile span{filter:drop-shadow(0 4px 6px rgba(0,0,0,.25))}
+.ph .htile{background:linear-gradient(135deg,#ff9500,#ff2d55)}
+.sp{position:absolute;top:0;left:0;width:100%;height:448px;overflow:hidden;border-radius:22px;clip-path:inset(0 0 100% 0);pointer-events:none}
+.it.none{height:auto}
+body:has(#s-idle:checked) .sp{clip-path:inset(0 0 100% 0)!important;pointer-events:none!important}
+.ph{height:auto;display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px}
+.ph .htile{flex:none;width:56px;height:56px;border-radius:14px;font-size:30px}
+.ph h2{margin:0 0 2px;font-size:18px}
+body:has(#s-roll:checked) .ph,body:has(#s-stop:checked) .ph{display:none}
+body:has(#s-roll:checked) .stage,body:has(#s-stop:checked) .stage{position:fixed;left:16px;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));margin:0;height:448px;z-index:15;border-radius:22px;box-shadow:0 14px 44px rgba(0,0,0,.4)}
+.x{display:none;position:absolute;top:22px;right:24px;z-index:16;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;font-size:16px;font-weight:700;place-items:center}
+body:has(#s-stop:checked) .x{display:grid}
+body:has(#s-stop:checked) .strip{animation-play-state:paused!important}
+body:has(#s-roll:checked) .it a,body:has(#s-roll:checked) .gut{visibility:hidden}
+body:has(#s-roll:checked) .sp{filter:blur(.6px)}
+body:has(#s-stop:checked) .stage{animation:pop .35s ease}
+.hb{padding:12px 4px 0}
+.hk{font-size:13px;font-weight:600;color:var(--tint);text-transform:uppercase}
+.hn{font-size:26px;font-weight:700;margin-top:2px}
+.hj{font-size:18px;color:var(--sec)}
+.hb p{margin:6px 0 2px;font-size:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hm{font-size:14px;color:var(--sec);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:block;text-align:center;margin-top:10px;padding:12px;border-radius:12px;background:var(--blue);color:#fff;font-weight:600}
+.gut{margin-top:10px;font-size:13px;color:var(--sec);background:var(--fill);border-radius:10px;padding:8px 10px}
+.fab{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:20}
+.fab label{display:none;text-align:center;padding:17px;border-radius:16px;background:var(--tint);color:#fff;font-size:18px;font-weight:700;box-shadow:0 8px 24px rgba(255,149,0,.35)}
+.fab label.dark{background:var(--fg);color:var(--bg)}
+body:has(#s-idle:checked) .f-si,body:has(#s-roll:checked) .f-sr,body:has(#s-stop:checked) .f-ss{display:block}
+%%DYNCSS%%
+</style></head>
+<body>
+<input class="h" type="radio" name="s" id="s-idle" checked><input class="h" type="radio" name="s" id="s-roll"><input class="h" type="radio" name="s" id="s-stop">
+<div class="lt"><div class="ey">Japan food chains · Simple</div><h1>What do I eat?</h1></div>
+<div class="sh">1 · Pick a feel (or don't)</div>
+<div class="grid">%%GRID%%</div>
+<div class="seg"><input type="radio" name="st" id="st-any" checked><label for="st-any">Any time</label><input type="radio" name="st" id="st-late"><label for="st-late">🌙 Late night</label></div>
+
+<div class="stage">
+<div class="ph"><div class="htile"><span>🎲</span></div><div><h2>Tap Spin below</h2><p>%%N%% chains. Better-ranked ones come up more often.</p></div></div>
+<label class="x" for="s-idle">✕</label>
+%%SPINS%%
+</div>
+<div class="ft">Hours and prices vary by branch, so check Maps.<br>More modes (Pick 3, Quiz, Veto, Browse): <a href="%%DETAILED%%">get the Detailed version</a>.</div>
+<div class="fab"><label class="f-si" for="s-stop">🎲 Spin</label><label class="f-sr dark" for="s-stop">✋ Stop!</label><label class="f-ss" for="s-roll">🎲 Spin again</label></div>
+</body></html>
