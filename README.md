@@ -10,6 +10,8 @@ One file · works offline · no app, no sign-up, no coding
 
 ## [⬇️ Download it here (tap me)](https://github.com/Junteki/what-do-i-eat/archive/refs/heads/main.zip)
 
+or **[🌐 open it in your browser, no download](https://junteki.github.io/what-do-i-eat/what-do-i-eat.html)**
+
 <img src="screenshots/1-simple-pick.jpg" width="230" alt="Pick a feel"> &nbsp; <img src="screenshots/2-simple-ticket.jpg" width="230" alt="Your meal ticket">
 
 </div>
@@ -79,6 +81,9 @@ No. "Often 24h" and "Shuts ~22–23" are typical hours, and every branch is diff
 
 **What do S / A / B and NEW mean?**
 S–D is how well each chain ranked across eight popular Instagram tier lists. **NEW** chains were added so you have more options, and they aren't ranked.
+
+**Can I just use it in my browser?**
+Yes: **[junteki.github.io/what-do-i-eat/what-do-i-eat.html](https://junteki.github.io/what-do-i-eat/what-do-i-eat.html)**. In Safari, tap Share → **Add to Home Screen** and it sits on your phone like an app.
 
 **Can I share it?**
 Yes. Send people this page's link, or AirDrop them the `what-do-i-eat.html` file.
